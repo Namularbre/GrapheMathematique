@@ -33,3 +33,13 @@ Graphe graphe = CreerGraphe();
 Console.WriteLine(graphe.VerdString());
 graphe.TrierParAretesCout();
 Console.Write(graphe.VerdString());
+int[,] matriceAdjacence = graphe.AvoirMatriceAdjacence();
+
+for (int i = 0; i < graphe.nombreArette; i++)
+{
+    for (int j = 0; j < graphe.nombreArette; j++)
+    {
+        Console.Write(matriceAdjacence[i, j]);
+    }
+    Console.WriteLine();
+}

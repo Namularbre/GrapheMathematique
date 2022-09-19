@@ -107,6 +107,7 @@ namespace ApplicationGraphe
             foreach (Arete arete in this.aretes)
             {
                 matriceAdjacence[AvoirIndexSommet(arete.sommetDepart), AvoirIndexSommet(arete.sommetArrive)] = 1;
+                matriceAdjacence[AvoirIndexSommet(arete.sommetArrive), AvoirIndexSommet(arete.sommetDepart)] = 1;
             }
 
             return matriceAdjacence;
