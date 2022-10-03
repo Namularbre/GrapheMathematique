@@ -1,6 +1,6 @@
 ﻿using ApplicationGraphe;
 
-Graphe CreerGraphe()
+static Graphe CreerGraphe()
 {
     HashSet<Arete> nouvelleAretes = new HashSet<Arete>();
     int reponse = 1;
@@ -14,7 +14,7 @@ Graphe CreerGraphe()
             int sommetArrive = int.Parse(Console.ReadLine());
             Console.WriteLine("Entrez le poid de votre arête");
             int poidArete = int.Parse(Console.ReadLine());
-            Console.WriteLine("Continuer? n=non autre=oui");
+            Console.WriteLine("Continuer? 0=non 1=oui");
             reponse = int.Parse(Console.ReadLine());
 
             nouvelleAretes.Add(new Arete(sommetDepart, sommetArrive, poidArete));
@@ -28,6 +28,18 @@ Graphe CreerGraphe()
     return new Graphe(nouvelleAretes, nouvelleAretes.Count);
 }
 
+static void AfficherMatrice(Graphe graphe, int[,] matriceAdjacence)
+{
+    for (int i = 0; i < graphe.nombreArette; i++)
+    {
+        for (int j = 0; j < graphe.nombreArette; j++)
+        {
+            Console.Write(matriceAdjacence[i, j]);
+        }
+        Console.WriteLine();
+    }
+}
+
 Graphe graphe = CreerGraphe();
 
 Console.WriteLine(graphe.VerdString());
@@ -35,11 +47,18 @@ graphe.TrierParAretesCout();
 Console.Write(graphe.VerdString());
 int[,] matriceAdjacence = graphe.AvoirMatriceAdjacence();
 
-for (int i = 0; i < graphe.nombreArette; i++)
+AfficherMatrice(graphe, matriceAdjacence);
+
+int[,] matriceA = new int[,] 
 {
-    for (int j = 0; j < graphe.nombreArette; j++)
-    {
-        Console.Write(matriceAdjacence[i, j]);
-    }
-    Console.WriteLine();
-}
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
+
+int[,] matriceB = new int[,]
+{
+    {9, 8, 7},
+    {6, 5, 4},
+    {3, 2, 1}
+};
