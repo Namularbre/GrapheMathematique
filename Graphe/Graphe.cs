@@ -113,9 +113,16 @@ namespace ApplicationGraphe
             return new Matrice(matriceAdjacence, this.sommets.Count);
         }
 
-        public void AfficherChemin(Matrice matriceAdjacence)
+        public void AfficherChemin(Matrice matriceAdjacence, int longueurChemin, int sommetDepart, int sommetFin)
         {
+            var matrice = matriceAdjacence.Puissance(longueurChemin);
 
+            int nombreChemins1 = matrice.contenu[AvoirIndexSommet(sommetDepart), AvoirIndexSommet(sommetFin)];
+            int nombreChemins2 = matrice.contenu[AvoirIndexSommet(sommetFin), AvoirIndexSommet(sommetDepart)];
+
+            Console.WriteLine(nombreChemins1 + " | " + nombreChemins2);
         }
+
+        
     }
 }
