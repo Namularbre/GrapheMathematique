@@ -9,20 +9,25 @@ namespace ApplicationGraphe
     internal class Matrice
     {
         public int[,] contenu { get; set; }
+        public int longueurLigneColonne { get; set; }
 
-        public Matrice(int[,] contenu)
+        public Matrice(int[,] contenu, int longueurLigneColonne)
         {
             this.contenu = contenu;
+            this.longueurLigneColonne = longueurLigneColonne;
         }
 
         public void AfficherMatrice()
         {
             const char ESPACE = ' ';
-            for (int i = 0; i < contenu.Length; i++)
+            const char DEBUT_CASE = '[';
+            const char FIN_CASE = ']';
+            
+            for (int iterateurLigne = 0; iterateurLigne < this.longueurLigneColonne; iterateurLigne++)
             {
-                for (int j = 0; j < contenu.Length; j++)
+                for (int iterateurColonne = 0; iterateurColonne < this.longueurLigneColonne; iterateurColonne++)
                 {
-                    Console.Write(this.contenu[i, j] + ESPACE);
+                    Console.Write(DEBUT_CASE + this.contenu[iterateurLigne, iterateurColonne].ToString() + FIN_CASE + ESPACE);
                 }
                 Console.WriteLine();
             }
@@ -30,13 +35,13 @@ namespace ApplicationGraphe
 
         public Matrice Multiplier(Matrice matrice)
         {
-            Matrice matriceProduit = new Matrice(new int[contenu.Length, contenu.Length]);
+            Matrice matriceProduit = new Matrice(new int[this.longueurLigneColonne, this.longueurLigneColonne], this.longueurLigneColonne);
 
-            for (int iterateurLigne = 0; iterateurLigne < contenu.Length; iterateurLigne++)
+            for (int iterateurLigne = 0; iterateurLigne < this.longueurLigneColonne; iterateurLigne++)
             {
-                for (int iterateurColonne = 0; iterateurColonne < contenu.Length; iterateurColonne++)
+                for (int iterateurColonne = 0; iterateurColonne < this.longueurLigneColonne; iterateurColonne++)
                 {
-                    for (int k = 0; k < contenu.Length; k++)
+                    for (int k = 0; k < this.longueurLigneColonne; k++)
                     {
                         matriceProduit.contenu[iterateurLigne, iterateurColonne] += this.contenu[iterateurLigne, k] * matrice.contenu[k, iterateurColonne];
                     }
@@ -45,17 +50,49 @@ namespace ApplicationGraphe
 
             return matriceProduit;
         }
-
-        public Matrice Exponentiel(int exponentiel)
+        
+        public Matrice Puissance(int exponentiel)
         {
+            if(exponentiel == 0)
+            {
+                return this.faireMatriceIdentiteDeMemeTaille();
+            }
+
+            if (exponentiel == 1)
+            {
+                return this;
+            }
+
             Matrice matriceProduit = this;
 
-            for (int iterateur = 0; iterateur < contenu.Length; iterateur++)
+            for (int iterateur = 0; iterateur < exponentiel - 1; iterateur++)
             {
-                matriceProduit = this.Multiplier(this);
+                matriceProduit = matriceProduit.Multiplier(this);
             }
 
             return matriceProduit;
+        }
+
+        private Matrice faireMatriceIdentiteDeMemeTaille()
+        {
+            var contenuMatriceIdentiteDeMemeTaille = new int[this.longueurLigneColonne, this.longueurLigneColonne];
+            
+            for(int iterateurLigne = 0; iterateurLigne < this.longueurLigneColonne; iterateurLigne++)
+            {
+                for(int iterateurColonne = 0; iterateurColonne < this.longueurLigneColonne; iterateurColonne++)
+                {
+                    if(iterateurLigne != iterateurColonne)
+                    {
+                        contenuMatriceIdentiteDeMemeTaille[iterateurColonne, iterateurLigne] = 0;
+                    }
+                    else
+                    {
+                        contenuMatriceIdentiteDeMemeTaille[iterateurColonne, iterateurLigne] = 1;
+                    }
+                }
+            }
+
+            return new Matrice(contenuMatriceIdentiteDeMemeTaille, this.longueurLigneColonne);
         }
     }
 }
