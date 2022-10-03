@@ -92,7 +92,7 @@ namespace ApplicationGraphe
             return -1;
         }
 
-        public int[,] AvoirMatriceAdjacence()
+        public Matrice AvoirMatriceAdjacence()
         {
             int[,] matriceAdjacence = new int[this.nombreArette, this.nombreArette];
 
@@ -110,7 +110,12 @@ namespace ApplicationGraphe
                 matriceAdjacence[AvoirIndexSommet(arete.sommetArrive), AvoirIndexSommet(arete.sommetDepart)] = 1;
             }
 
-            return matriceAdjacence;
+            return new Matrice(matriceAdjacence, this.sommets.Count);
+        }
+
+        public void AfficherChemin(Matrice matriceAdjacence)
+        {
+
         }
     }
 }

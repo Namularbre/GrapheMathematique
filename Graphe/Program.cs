@@ -1,6 +1,6 @@
 ﻿using ApplicationGraphe;
 
-/*static Graphe CreerGraphe()
+static Graphe CreerGraphe()
 {
     HashSet<Arete> nouvelleAretes = new HashSet<Arete>();
     int reponse = 1;
@@ -28,27 +28,15 @@
     return new Graphe(nouvelleAretes, nouvelleAretes.Count);
 }
 
-static void AfficherMatrice(Graphe graphe, int[,] matriceAdjacence)
-{
-    for (int i = 0; i < graphe.nombreArette; i++)
-    {
-        for (int j = 0; j < graphe.nombreArette; j++)
-        {
-            Console.Write(matriceAdjacence[i, j]);
-        }
-        Console.WriteLine();
-    }
-}
-
 Graphe graphe = CreerGraphe();
 
 Console.WriteLine(graphe.VerdString());
 graphe.TrierParAretesCout();
 Console.Write(graphe.VerdString());
-int[,] matriceAdjacence = graphe.AvoirMatriceAdjacence();
+var matriceAdjacence = graphe.AvoirMatriceAdjacence();
 
-AfficherMatrice(graphe, matriceAdjacence);
-*/
+matriceAdjacence.AfficherMatrice();
+
 int[,] matriceA = new int[,] 
 {
     {1, 2, 3},
