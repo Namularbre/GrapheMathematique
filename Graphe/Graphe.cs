@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace ApplicationGraphe
 {
     internal class Graphe
     {
+        //Le HashSet contient une liste d'objet d'un seul et unique type. Il n'a JAMAIS de doublons.
         public HashSet<Arete> aretes { get; set; }
         public int nombreArette { get; set; }
         public HashSet<int> sommets { get; set; }
@@ -68,7 +70,7 @@ namespace ApplicationGraphe
 
         public void TrierParAretesCout()
         {
-            var aretesDansOrdrePoid = this.aretes.OrderBy(arete => arete.poidArette);
+            var aretesDansOrdrePoid = this.aretes.OrderBy(arete => arete.poidArete);
             HashSet<Arete> aretesTrierParPoid = new HashSet<Arete>();
             foreach (var arete in aretesDansOrdrePoid)
             {
@@ -113,16 +115,67 @@ namespace ApplicationGraphe
             return new Matrice(matriceAdjacence, this.sommets.Count);
         }
 
-        public void AfficherChemin(Matrice matriceAdjacence, int longueurChemin, int sommetDepart, int sommetFin)
+        public void AfficherNombreChemin(Matrice matriceAdjacence, int longueurChemin, int sommetDepart, int sommetFin)
         {
             var matrice = matriceAdjacence.Puissance(longueurChemin);
 
             int nombreChemins1 = matrice.contenu[AvoirIndexSommet(sommetDepart), AvoirIndexSommet(sommetFin)];
-            int nombreChemins2 = matrice.contenu[AvoirIndexSommet(sommetFin), AvoirIndexSommet(sommetDepart)];
 
-            Console.WriteLine(nombreChemins1 + " | " + nombreChemins2);
+            Console.WriteLine(nombreChemins1);
+        }
+        //Kruskal
+        public void AvoirArbreCouvrantMaximal()
+        {
+            if (!this.EstConnexe())
+            {
+                Console.WriteLine("Le graphe n'est pas connexe.");
+                return;
+            }
+
+            Console.WriteLine("---- Arbre couvrant maximal ----");
+            //To dictionary ?
+            HashSet<Arete> aretesTrierParPoid = this.aretes.OrderByDescending(poidArete => this.aretes.ElementAt(0).poidArete).ToHashSet();
+            HashSet<int> sommetMarquees = new HashSet<int>();
+            
+            foreach (var arete in aretesTrierParPoid)
+            {
+                Console.WriteLine(arete.VersString());
+                if (!sommetMarquees.Contains(arete.sommetDepart) && !sommetMarquees.Contains(arete.sommetArrive))
+                {
+                    sommetMarquees.Add(arete.sommetDepart);
+                    sommetMarquees.Add(arete.sommetArrive);
+                }
+            }
+
+            foreach (var sommet in sommetMarquees)
+            {
+                Console.WriteLine(sommet);
+            }
+        }
+        //Parcour en profondeur du graphe
+        private bool EstConnexe()
+        {
+            const bool PAS_MARQUER = false;
+            const bool MARQUER = true;
+
+            Dictionary<int, bool> sommetsDuGrapheAvecMarqueur = new Dictionary<int, bool>();
+
+            foreach(int sommet in this.sommets)
+            {
+                sommetsDuGrapheAvecMarqueur.Add(sommet, PAS_MARQUER);
+            }
+
+
+
+            return true;
         }
 
-        
+        public Matrice AvoirMatriceTransitive()
+        {
+            
+            Matrice matriceTransitive;
+
+            return null;
+        }
     }
 }

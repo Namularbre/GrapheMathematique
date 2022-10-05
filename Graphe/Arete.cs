@@ -10,18 +10,20 @@ namespace ApplicationGraphe
     {
         public int sommetDepart { get; set; }
         public int sommetArrive { get; set; }
-        public int poidArette { get; set; }
+        public int poidArete { get; set; }
+        public bool estMarque { get; set; }
 
         public Arete(int sommetDepart, int sommetArrive, int poidArette)
         {
             this.sommetDepart = sommetDepart;
             this.sommetArrive = sommetArrive;
-            this.poidArette = poidArette;
+            this.poidArete = poidArette;
+            this.estMarque = false;
         }
 
         public string VersString()
         {
-            return this.sommetDepart + "<->" + this.sommetArrive + " coût : " + this.poidArette;
+            return this.sommetDepart + "<->" + this.sommetArrive + " coût : " + this.poidArete;
         }
     }
 }

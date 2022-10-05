@@ -51,21 +51,21 @@ namespace ApplicationGraphe
             return matriceProduit;
         }
         
-        public Matrice Puissance(int exponentiel)
+        public Matrice Puissance(int puissance)
         {
-            if(exponentiel == 0)
+            if(puissance == 0)
             {
                 return this.faireMatriceIdentiteDeMemeTaille();
             }
 
-            if (exponentiel == 1)
+            if (puissance == 1)
             {
                 return this;
             }
 
             Matrice matriceProduit = this;
 
-            for (int iterateur = 0; iterateur < exponentiel - 1; iterateur++)
+            for (int iterateur = 0; iterateur < puissance - 1; iterateur++)
             {
                 matriceProduit = matriceProduit.Multiplier(this);
             }

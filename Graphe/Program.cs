@@ -26,14 +26,14 @@
     }
 
     return new Graphe(nouvelleAretes, nouvelleAretes.Count);
-}*/
+}
 
-//Graphe graphe = CreerGraphe();
+//Graphe graphe = CreerGraphe();*/
 
-Arete arete1 = new Arete(1, 2, 0);
-Arete arete2 = new Arete(2, 3, 0);
-Arete arete3 = new Arete(3, 1, 0);
-Arete arete4 = new Arete(4, 2, 0);
+Arete arete1 = new Arete(1, 2, 8);
+Arete arete2 = new Arete(2, 3, 6);
+Arete arete3 = new Arete(3, 1, 3);
+Arete arete4 = new Arete(4, 2, 1);
 
 HashSet<Arete> aretes = new HashSet<Arete>();
 
@@ -72,7 +72,7 @@ var m12 = m1.Multiplier(m2);
 var m21 = m2.Multiplier(m1);
 var me2 = m1.Puissance(0);
 
-graphe.AfficherChemin(matriceAdjacence, 4, 1, 4);
+graphe.AfficherNombreChemin(matriceAdjacence, 4, 1, 4);
 
 int[,] contenuMatriceBool1 = new int[3, 3]
 {
@@ -98,3 +98,6 @@ Console.WriteLine("-----------");
 var mb1plus2 = matriceBooleene1.Additionner(matriceBooleene2);
 
 mb1plus2.AfficherMatrice();
+
+Console.WriteLine("toto");
+graphe.AvoirArbreCouvrantMaximal();
