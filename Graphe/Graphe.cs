@@ -112,7 +112,7 @@ namespace ApplicationGraphe
                 matriceAdjacence[AvoirIndexSommet(arete.sommetArrive), AvoirIndexSommet(arete.sommetDepart)] = 1;
             }
 
-            return new Matrice(matriceAdjacence, this.sommets.Count);
+            return new Matrice(matriceAdjacence);
         }
 
         public void AfficherNombreChemin(Matrice matriceAdjacence, int longueurChemin, int sommetDepart, int sommetFin)
@@ -197,7 +197,7 @@ namespace ApplicationGraphe
                 }
             }
 
-            return new Matrice(matrice, this.sommets.Count);
+            return new Matrice(matrice);
         }
     }
 }

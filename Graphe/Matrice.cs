@@ -11,10 +11,11 @@ namespace ApplicationGraphe
         public int[,] contenu { get; set; }
         public int longueurLigneColonne { get; set; }
 
-        public Matrice(int[,] contenu, int longueurLigneColonne)
+        public Matrice(int[,] contenu)
         {
             this.contenu = contenu;
-            this.longueurLigneColonne = longueurLigneColonne;
+            //On récupère la taille des lignes de la matrice.
+            this.longueurLigneColonne = contenu.GetLength(0);
         }
 
         public void AfficherMatrice()
@@ -35,7 +36,7 @@ namespace ApplicationGraphe
 
         public Matrice Multiplier(Matrice matrice)
         {
-            Matrice matriceProduit = new Matrice(new int[this.longueurLigneColonne, this.longueurLigneColonne], this.longueurLigneColonne);
+            Matrice matriceProduit = new Matrice(new int[this.longueurLigneColonne, this.longueurLigneColonne]);
 
             for (int iterateurLigne = 0; iterateurLigne < this.longueurLigneColonne; iterateurLigne++)
             {
@@ -92,7 +93,7 @@ namespace ApplicationGraphe
                 }
             }
 
-            return new Matrice(contenuMatriceIdentiteDeMemeTaille, this.longueurLigneColonne);
+            return new Matrice(contenuMatriceIdentiteDeMemeTaille);
         }
     }
 }

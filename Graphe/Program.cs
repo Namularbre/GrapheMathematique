@@ -65,8 +65,8 @@ int[,] matriceB = new int[,]
     {3, 2, 1}
 };
 
-var m1 = new Matrice(matriceA, 3);
-var m2 = new Matrice(matriceB, 3);
+var m1 = new Matrice(matriceA);
+var m2 = new Matrice(matriceB);
 
 var m12 = m1.Multiplier(m2);
 var m21 = m2.Multiplier(m1);
