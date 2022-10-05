@@ -172,10 +172,32 @@ namespace ApplicationGraphe
 
         public Matrice AvoirMatriceTransitive()
         {
-            
-            Matrice matriceTransitive;
+            /*int[,] matrice = new int[,]
+            {
+               {0, 1, 0, 1, 0, 0},
+               {0, 0, 0, 0, 0, 0},
+               {0, 1, 0, 0, 1, 0},
+               {0, 0, 0, 0, 0, 1},
+               {0, 0, 1, 1, 0, 0},
+               {0, 0, 0, 0, 0, 0},
+            };*/
 
-            return null;
+            int[,] matrice = this.AvoirMatriceAdjacence().contenu;
+
+
+            for (int k = 0; k < matrice.GetLength(0); k++)
+            {
+                for (int iterateurLigne = 0; iterateurLigne < matrice.GetLength(0); iterateurLigne++)
+                {
+                    for (int iterateurColonne = 0; iterateurColonne < matrice.GetLength(0); iterateurColonne++)
+                    {
+                        matrice[iterateurLigne, iterateurColonne] = (matrice[iterateurLigne, iterateurColonne] != 0) ||
+                            ((matrice[iterateurLigne, k] != 0) && (matrice[k, iterateurColonne] != 0)) ? 1 : 0;
+                    }
+                }
+            }
+
+            return new Matrice(matrice, this.sommets.Count);
         }
     }
 }
