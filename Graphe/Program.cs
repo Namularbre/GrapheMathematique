@@ -44,7 +44,9 @@ aretes.Add(arete4);
 
 Graphe graphe = new Graphe(aretes, 4);
 
-graphe.AvoirArbreCouvrantMinimal();
+graphe.Kruskal();
+
+
 /*
 for (int iter = 1; iter <= graphe.aretes.Count; iter++)
 {

@@ -135,23 +135,28 @@ namespace ApplicationGraphe
             }
 
             Console.WriteLine("---- Arbre couvrant minimal ----");
-            
+            //Trie des arêtes par poid
             HashSet<Arete> aretesTrierParPoid = this.aretes.OrderByDescending(poidArete => this.aretes.ElementAt(0).poidArete).ToHashSet();
-            var aretesArbreCouvrantPoidMinimal = new HashSet<Arete>();
-            var sommetsAvecFlag = FlaggerSommet();
+
+            var arbreCouvrantPoidMinimal = new Arbre();
+
+            /*var aretesArbreCouvrantPoidMinimal = new HashSet<Arete>();
+            var sommetsAvecFlag = FlaggerSommet();*/
 
             foreach (var arete in aretesTrierParPoid)
             {
-                HashSet<Arete> aretesReliees = AvoirAreteRelierArete(arete);
-                sommetsAvecFlag = ChangerFlag(arete, sommetsAvecFlag);
-                
+                /*HashSet<Arete> aretesReliees = AvoirAreteRelierArete(arete);
+                sommetsAvecFlag = ChangerFlag(arete, sommetsAvecFlag);*/
+                arbreCouvrantPoidMinimal.AjouterArete(arete);
                 
             }
 
-            foreach(var arete in aretesArbreCouvrantPoidMinimal)
-            {
-                Console.WriteLine(arete.VersString());
-            }
+            /*/*arbreCouvrantPoidMinimal.Afficher();*/
+
+            //foreach(var arete in aretesArbreCouvrantPoidMinimal)
+            //{
+            //    Console.WriteLine(arete.VersString());
+            //}
         }
 
         private Dictionary<int, int> ChangerFlag(Arete arete, Dictionary<int, int> sommetsAvecFlag)
@@ -209,18 +214,94 @@ namespace ApplicationGraphe
             const bool PAS_MARQUER = false;
             const bool MARQUER = true;
 
-            int sommet = this.sommets.ElementAt(0);
+            var sommetMarques = new List<int>();
 
-            var aretesReliees = new HashSet<Arete>();
+            //foreach (var item in collection)
+            //{
 
-            foreach (var arete in this.aretes)
+            //}
+            return true;
+        }
+
+        private void marquer() { }
+
+        public class Famille
+        {
+            public int parent, rang;
+
+            public Famille(int parent, int rang)
             {
-                if (arete.sommetDepart == sommet || arete.sommetArrive == sommet)
+                this.parent = parent; 
+                this.rang = rang;
+            }
+        };
+
+        private int AvoirParent(List<Famille> familles, int sommet)
+        {
+            if (familles[AvoirIndexSommet(sommet)].parent != sommet)
+            {
+                familles[AvoirIndexSommet(sommet)].parent = AvoirParent(familles, familles[AvoirIndexSommet(sommet)].parent);
+            }
+
+            return familles[AvoirIndexSommet(sommet)].parent;
+        }
+
+        private void Union(List<Famille> familles, int sommetDepart, int sommetArrive)
+        {
+            int plusVieuxParentSommetDepart = AvoirParent(familles, sommetDepart);
+            int plusVieuxParentSommetArrive = AvoirParent(familles, sommetArrive);
+
+            if (familles[AvoirIndexSommet(plusVieuxParentSommetDepart)].rang < familles[AvoirIndexSommet(plusVieuxParentSommetArrive)].rang)
+            {
+                familles[AvoirIndexSommet(plusVieuxParentSommetDepart)].parent = plusVieuxParentSommetArrive;
+            }
+            else if (familles[AvoirIndexSommet(plusVieuxParentSommetDepart)].rang > familles[AvoirIndexSommet(plusVieuxParentSommetArrive)].rang)
+            {
+                familles[AvoirIndexSommet(plusVieuxParentSommetArrive)].parent = plusVieuxParentSommetDepart;
+            }
+            else
+            {
+                familles[AvoirIndexSommet(plusVieuxParentSommetArrive)].parent = plusVieuxParentSommetDepart;
+                familles[AvoirIndexSommet(plusVieuxParentSommetDepart)].rang++;
+            }
+        }
+
+        public void Kruskal()
+        {
+            TrierParAretesCout();
+
+            List<Arete> resultat = new List<Arete>();
+
+            List<Famille> familles = new List<Famille>();
+
+            foreach (var sommet in this.sommets)
+            {
+                familles.Add(new Famille(sommet, 0));
+            }
+
+            foreach (Arete arete in this.aretes)
+            {
+                int plusVieuxParentSommetDepart = AvoirParent(familles, arete.sommetDepart);
+                int plusVieuxParentSommetArrive = AvoirParent(familles, arete.sommetArrive);
+
+                if (plusVieuxParentSommetDepart != plusVieuxParentSommetArrive)
                 {
-                    aretesReliees.Add(arete);
+                    resultat.Add(arete);
+                    Union(familles, plusVieuxParentSommetDepart, plusVieuxParentSommetArrive);
                 }
             }
-            return true;
+
+            Console.WriteLine("---- Arbre couvrant minimal ----");
+
+            int coutMinimal = 0;
+
+            foreach (var areteResult in resultat)
+            {
+                Console.WriteLine(areteResult.VersString());
+                coutMinimal += areteResult.poidArete;
+            }
+
+            Console.WriteLine("Poid de l'arbre : " + coutMinimal);
         }
 
         private HashSet<Arete> TrouverAreteSommet(int sommet)
