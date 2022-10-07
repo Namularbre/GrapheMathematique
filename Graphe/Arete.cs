@@ -11,14 +11,12 @@ namespace ApplicationGraphe
         public int sommetDepart { get; set; }
         public int sommetArrive { get; set; }
         public int poidArete { get; set; }
-        public bool estMarque { get; set; }
 
         public Arete(int sommetDepart, int sommetArrive, int poidArette)
         {
             this.sommetDepart = sommetDepart;
             this.sommetArrive = sommetArrive;
             this.poidArete = poidArette;
-            this.estMarque = false;
         }
 
         public string VersString()

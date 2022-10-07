@@ -30,10 +30,10 @@
 
 //Graphe graphe = CreerGraphe();*/
 
-Arete arete1 = new Arete(1, 2, 8);
-Arete arete2 = new Arete(2, 3, 6);
-Arete arete3 = new Arete(3, 1, 3);
-Arete arete4 = new Arete(4, 2, 1);
+Arete arete1 = new Arete(1, 2, 7);
+Arete arete2 = new Arete(2, 3, 8);
+Arete arete3 = new Arete(3, 1, 6);
+Arete arete4 = new Arete(4, 2, 2);
 
 HashSet<Arete> aretes = new HashSet<Arete>();
 
@@ -44,6 +44,16 @@ aretes.Add(arete4);
 
 Graphe graphe = new Graphe(aretes, 4);
 
+graphe.AvoirArbreCouvrantMinimal();
+/*
+for (int iter = 1; iter <= graphe.aretes.Count; iter++)
+{
+    var res = matriceAdj.Puissance(iter);
+    Console.WriteLine("---- " + iter + " ----");
+    res.AfficherMatrice();
+}
+*/
+/*
 Console.WriteLine(graphe.VerdString());
 graphe.TrierParAretesCout();
 Console.Write(graphe.VerdString());
@@ -100,4 +110,4 @@ var mb1plus2 = matriceBooleene1.Additionner(matriceBooleene2);
 mb1plus2.AfficherMatrice();
 
 Console.WriteLine("toto");
-graphe.AvoirArbreCouvrantMaximal();
+graphe.AvoirArbreCouvrantMinimal();*/

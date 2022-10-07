@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -123,8 +124,9 @@ namespace ApplicationGraphe
 
             Console.WriteLine(nombreChemins1);
         }
+
         //Kruskal
-        public void AvoirArbreCouvrantMaximal()
+        public void AvoirArbreCouvrantMinimal()
         {
             if (!this.EstConnexe())
             {
@@ -132,72 +134,139 @@ namespace ApplicationGraphe
                 return;
             }
 
-            Console.WriteLine("---- Arbre couvrant maximal ----");
-            //To dictionary ?
-            HashSet<Arete> aretesTrierParPoid = this.aretes.OrderByDescending(poidArete => this.aretes.ElementAt(0).poidArete).ToHashSet();
-            HashSet<int> sommetMarquees = new HashSet<int>();
+            Console.WriteLine("---- Arbre couvrant minimal ----");
             
+            HashSet<Arete> aretesTrierParPoid = this.aretes.OrderByDescending(poidArete => this.aretes.ElementAt(0).poidArete).ToHashSet();
+            var aretesArbreCouvrantPoidMinimal = new HashSet<Arete>();
+            var sommetsAvecFlag = FlaggerSommet();
+
             foreach (var arete in aretesTrierParPoid)
             {
+                HashSet<Arete> aretesReliees = AvoirAreteRelierArete(arete);
+                sommetsAvecFlag = ChangerFlag(arete, sommetsAvecFlag);
+                
+                
+            }
+
+            foreach(var arete in aretesArbreCouvrantPoidMinimal)
+            {
                 Console.WriteLine(arete.VersString());
-                if (!sommetMarquees.Contains(arete.sommetDepart) && !sommetMarquees.Contains(arete.sommetArrive))
+            }
+        }
+
+        private Dictionary<int, int> ChangerFlag(Arete arete, Dictionary<int, int> sommetsAvecFlag)
+        {
+            if (arete.sommetDepart < arete.sommetArrive)
+            {
+                sommetsAvecFlag[arete.sommetArrive] = arete.sommetDepart;
+            }
+            else
+            {
+                sommetsAvecFlag[arete.sommetDepart] = arete.sommetArrive;
+            }
+
+            return sommetsAvecFlag;
+        }
+
+        private Dictionary<int, int> FlaggerSommet()
+        {
+            var sommetsAvecFlag = new Dictionary<int, int>();
+
+            foreach (var sommet in this.sommets)
+            {
+                sommetsAvecFlag.Add(sommet, 0);
+            }
+
+            return sommetsAvecFlag;
+        }
+
+        private HashSet<Arete> AvoirAreteRelierArete(Arete arete)
+        {
+            HashSet<Arete> aretesReliees = AvoirAreteRelierAuSommet(arete.sommetDepart);
+            aretesReliees.Concat(AvoirAreteRelierAuSommet(arete.sommetArrive));
+
+            return aretesReliees;
+        }
+
+        private HashSet<Arete> AvoirAreteRelierAuSommet(int sommet)
+        {
+            HashSet<Arete> aretesRelierAuSommet = new HashSet<Arete>();
+
+            foreach (var arete in aretesRelierAuSommet)
+            {
+                if (arete.sommetDepart == sommet || arete.sommetArrive == sommet)
                 {
-                    sommetMarquees.Add(arete.sommetDepart);
-                    sommetMarquees.Add(arete.sommetArrive);
+                    aretesRelierAuSommet.Add(arete);
                 }
             }
 
-            foreach (var sommet in sommetMarquees)
-            {
-                Console.WriteLine(sommet);
-            }
+            return aretesRelierAuSommet;
         }
-        //Parcour en profondeur du graphe
+
+        //Parcour en profondeur du graphe à partir d'un sommet
         private bool EstConnexe()
         {
             const bool PAS_MARQUER = false;
             const bool MARQUER = true;
 
-            Dictionary<int, bool> sommetsDuGrapheAvecMarqueur = new Dictionary<int, bool>();
+            int sommet = this.sommets.ElementAt(0);
 
-            foreach(int sommet in this.sommets)
+            var aretesReliees = new HashSet<Arete>();
+
+            foreach (var arete in this.aretes)
             {
-                sommetsDuGrapheAvecMarqueur.Add(sommet, PAS_MARQUER);
+                if (arete.sommetDepart == sommet || arete.sommetArrive == sommet)
+                {
+                    aretesReliees.Add(arete);
+                }
             }
-
-
-
             return true;
+        }
+
+        private HashSet<Arete> TrouverAreteSommet(int sommet)
+        {
+            var aretesReliees = new HashSet<Arete>();
+
+            foreach (var arete in this.aretes)
+            {
+                if (arete.sommetDepart == sommet || arete.sommetArrive == sommet)
+                {
+                    aretesReliees.Add(arete);
+                    TrouverAreteSommet(arete.sommetDepart);
+                    TrouverAreteSommet(arete.sommetArrive);
+                }
+            }
+            return aretesReliees;
         }
 
         public Matrice AvoirMatriceTransitive()
         {
-            /*int[,] matrice = new int[,]
+            int[,] matriceAdjacence = this.AvoirMatriceAdjacence().contenu;
+
+            for (int k = 0; k < matriceAdjacence.GetLength(0); k++)
             {
-               {0, 1, 0, 1, 0, 0},
-               {0, 0, 0, 0, 0, 0},
-               {0, 1, 0, 0, 1, 0},
-               {0, 0, 0, 0, 0, 1},
-               {0, 0, 1, 1, 0, 0},
-               {0, 0, 0, 0, 0, 0},
-            };*/
-
-            int[,] matrice = this.AvoirMatriceAdjacence().contenu;
-
-
-            for (int k = 0; k < matrice.GetLength(0); k++)
-            {
-                for (int iterateurLigne = 0; iterateurLigne < matrice.GetLength(0); iterateurLigne++)
+                for (int iterateurLigne = 0; iterateurLigne < matriceAdjacence.GetLength(0); iterateurLigne++)
                 {
-                    for (int iterateurColonne = 0; iterateurColonne < matrice.GetLength(0); iterateurColonne++)
+                    for (int iterateurColonne = 0; iterateurColonne < matriceAdjacence.GetLength(0); iterateurColonne++)
                     {
-                        matrice[iterateurLigne, iterateurColonne] = (matrice[iterateurLigne, iterateurColonne] != 0) ||
-                            ((matrice[iterateurLigne, k] != 0) && (matrice[k, iterateurColonne] != 0)) ? 1 : 0;
+                        if ((matriceAdjacence[iterateurLigne, iterateurColonne] != 0) ||
+                            ((matriceAdjacence[iterateurLigne, k] != 0) && (matriceAdjacence[k, iterateurColonne] != 0)))
+                        {
+                            matriceAdjacence[iterateurLigne, iterateurColonne] = 1;
+                        }
+                        else
+                        {
+                            matriceAdjacence[iterateurLigne, iterateurColonne] = 0;
+                        }
+                        /*
+                        matriceAdjacence[iterateurLigne, iterateurColonne] = (matriceAdjacence[iterateurLigne, iterateurColonne] != 0) ||
+                            ((matriceAdjacence[iterateurLigne, k] != 0) && (matriceAdjacence[k, iterateurColonne] != 0)) ? 1 : 0;
+                        */
                     }
                 }
             }
 
-            return new Matrice(matrice);
+            return new Matrice(matriceAdjacence);
         }
     }
 }
