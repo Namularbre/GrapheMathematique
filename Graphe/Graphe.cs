@@ -71,13 +71,16 @@ namespace ApplicationGraphe
 
         public void TrierParAretesCout()
         {
+            //Ici, on utile les fonctions de C# pour trier les arêtes par poid (coût)
             var aretesDansOrdrePoid = this.aretes.OrderBy(arete => arete.poidArete);
+            //On créer une liste d'arête de type hashset pour que l'on remplis avec le résultat. Cette opération sert juste à avoir une
+            //structure compatible avec la pluspart des listes.
             HashSet<Arete> aretesTrierParPoid = new HashSet<Arete>();
             foreach (var arete in aretesDansOrdrePoid)
             {
                 aretesTrierParPoid.Add(arete);
             }
-
+            //On donne au graphe  
             this.aretes = aretesTrierParPoid;
         }
 
@@ -97,8 +100,10 @@ namespace ApplicationGraphe
 
         public Matrice AvoirMatriceAdjacence()
         {
+            //On créer un tableau de 2 dimensions de taille nombreArette*nombreArette
             int[,] matriceAdjacence = new int[this.nombreArette, this.nombreArette];
 
+            //On le remplis de 0
             for(int iterateurLigne = 0; iterateurLigne < this.nombreArette; iterateurLigne++)
             {
                 for(int iterateurColonne = 0; iterateurColonne < this.nombreArette; iterateurColonne++)
@@ -107,22 +112,27 @@ namespace ApplicationGraphe
                 }
             }
 
+            //Pour chaque lien entre deux sommets (représenter avec les arêtes) on place à 1
             foreach (Arete arete in this.aretes)
             {
                 matriceAdjacence[AvoirIndexSommet(arete.sommetDepart), AvoirIndexSommet(arete.sommetArrive)] = 1;
                 matriceAdjacence[AvoirIndexSommet(arete.sommetArrive), AvoirIndexSommet(arete.sommetDepart)] = 1;
             }
-
+            //On retourne un objet matrice contenant le résultat.
             return new Matrice(matriceAdjacence);
         }
 
         public void AfficherNombreChemin(Matrice matriceAdjacence, int longueurChemin, int sommetDepart, int sommetFin)
         {
+            //On utilise la matrice d'adjacence du graphe, que l'on monte à la puissance = à la longueur du chemin.
+            //Cela nous donne le nombre de chemin de longueur donnée dans cette matrice, à la place :
+            //M(index du sommet de départ dans la liste des sommets, index du sommet d'arrivé dans la liste des sommets)
             var matrice = matriceAdjacence.Puissance(longueurChemin);
-
-            int nombreChemins1 = matrice.contenu[AvoirIndexSommet(sommetDepart), AvoirIndexSommet(sommetFin)];
-
-            Console.WriteLine(nombreChemins1);
+            //On récupère donc le nombre de chemin
+            int nombreChemins = matrice.contenu[AvoirIndexSommet(sommetDepart), AvoirIndexSommet(sommetFin)];
+            //On l'affiche
+            Console.WriteLine("Le nombre de chemin entre " + sommetDepart + " et " + sommetFin + " de longueur " +
+                longueurChemin + " est : " + nombreChemins);
         }
 
         public class Famille
