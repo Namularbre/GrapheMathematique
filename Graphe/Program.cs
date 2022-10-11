@@ -124,7 +124,19 @@ matriceBoolB.AfficherMatrice();
 Console.WriteLine("=");
 matriceBoolD.AfficherMatrice();
 
-Console.WriteLine("---- Comparaison de deux matrices");
+Console.WriteLine("---- Comparaison de deux matrices identique ----");
+
+matriceBoolA.AfficherMatrice();
+
+bool estIdentique = matriceBoolA.EstIdentique(matriceBoolA);
+Console.WriteLine(estIdentique);
+
+Console.WriteLine("---- Comparaison de deux matrices différente ----");
+
+matriceBoolA.AfficherMatrice();
+
+estIdentique = matriceBoolA.EstIdentique(matriceBoolB);
+Console.WriteLine(estIdentique);
 
 Console.WriteLine("---- Matrice transitive ----");
 
