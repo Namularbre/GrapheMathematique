@@ -133,8 +133,8 @@ namespace ApplicationGraphe
             return SOMMET_INTROUVABLE;
         }
 
-        /*
-            Cette méthode retourne un objet matrice contenant la matrice d'adjacence du graphe.
+        /**
+         *  Cette méthode retourne un objet matrice contenant la matrice d'adjacence du graphe.
          */
         public Matrice AvoirMatriceAdjacence()
         {
@@ -205,8 +205,9 @@ namespace ApplicationGraphe
             //On retourne le parent du sommet
             return familles[AvoirIndexSommet(sommet)].parent;
         }
-        /*
-            Cette méthode prend deux sommets, et les attributs à la même famille.
+
+        /**
+         *  Cette méthode prend deux sommets, et les attributs à la même famille.
          */
         private void Union(List<Famille> familles, int sommetDepart, int sommetArrive)
         {
@@ -303,12 +304,15 @@ namespace ApplicationGraphe
             int[,] matriceAdjacence = this.AvoirMatriceAdjacence().contenu;
 
             // Ici, on utilise l'algo de Floyd Warshall
+            // k est un sommet intermédiare qui sera ou non dans le chemin le plus court
+            // entre iterateurLigne(i) et iterateurColonne(j)
             for (int k = 0; k < matriceAdjacence.GetLength(0); k++)
             {
                 for (int iterateurLigne = 0; iterateurLigne < matriceAdjacence.GetLength(0); iterateurLigne++)
                 {
                     for (int iterateurColonne = 0; iterateurColonne < matriceAdjacence.GetLength(0); iterateurColonne++)
                     {
+                        // vérifi si k est dans le chemin ou pas
                         if ((matriceAdjacence[iterateurLigne, iterateurColonne] != 0) ||
                             ((matriceAdjacence[iterateurLigne, k] != 0) && (matriceAdjacence[k, iterateurColonne] != 0)))
                         {
