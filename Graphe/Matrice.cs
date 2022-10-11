@@ -61,7 +61,7 @@ namespace ApplicationGraphe
             //Si la puissance est 0, alors on retourne une matrice identité de même taille.
             if(puissance == 0)
             {
-                return this.faireMatriceIdentiteDeMemeTaille();
+                return this.FaireMatriceIdentiteDeMemeTaille();
             }
             //Si la puissance vaut 1, on retourne la matrice
             if (puissance == 1)
@@ -80,7 +80,7 @@ namespace ApplicationGraphe
         }
 
         //Cette fonction génère une matrice identidé de dimension égale à la matrice actuelle (this, self en python je crois)
-        private Matrice faireMatriceIdentiteDeMemeTaille()
+        private Matrice FaireMatriceIdentiteDeMemeTaille()
         {
             //On crée un tableau de deux dimension ayant la même taille que la matrice actuel
             var contenuMatriceIdentiteDeMemeTaille = new int[this.longueurLigneColonne, this.longueurLigneColonne];

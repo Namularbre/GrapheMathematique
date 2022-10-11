@@ -52,3 +52,81 @@ var matriceAdjacence = graphe.AvoirMatriceAdjacence();
 Console.WriteLine("---- Matrice d'adjacence ----");
 matriceAdjacence.AfficherMatrice();
 
+int[,] contenuMatriceA = 
+{
+    { 1, 5 ,6},
+    { 4, 12, 8},
+    { 9, 7, 4}
+};
+
+int[,] contenuMatriceB = 
+{
+    { 7, 6 ,6},
+    { 14, 1, 8},
+    { 9, 6, 10}
+};
+
+var matriceA = new Matrice(contenuMatriceA);
+var matriceB = new Matrice(contenuMatriceB);
+
+var matriceC = matriceA.Multiplier(matriceB);
+
+Console.WriteLine("---- Produit matriciel ----");
+
+matriceA.AfficherMatrice();
+Console.WriteLine("*");
+matriceB.AfficherMatrice();
+Console.WriteLine("=");
+matriceC.AfficherMatrice();
+
+Console.WriteLine("---- Puissance d'une matrice ----");
+
+matriceA.AfficherMatrice();
+Console.WriteLine("Puissance 3 :");
+var matriceD = matriceA.Puissance(3);
+matriceD.AfficherMatrice();
+
+Console.Write("Avoir la nombre de chemin entre le sommet 1 et 4 de longueur 3");
+
+graphe.AfficherNombreChemin(3, 1, 4);
+
+Console.WriteLine("---- Produit de deux matrices booléenes ----");
+
+int[,] contenuMatriceBoolA = {
+    {1, 0, 1},
+    {0, 0, 1},
+    {1, 0, 0}
+};
+
+int[,] contenuMatriceBoolB = {
+    {1, 0, 1},
+    {0, 1, 1},
+    {1, 0, 1}
+};
+
+var matriceBoolA = new MatriceBooleene(contenuMatriceBoolA);
+var matriceBoolB = new MatriceBooleene(contenuMatriceBoolB);
+var matriceBoolC = matriceBoolA.Multiplier(matriceBoolB);
+
+matriceBoolA.AfficherMatrice();
+Console.WriteLine("*");
+matriceBoolB.AfficherMatrice();
+Console.WriteLine("=");
+matriceBoolC.AfficherMatrice();
+
+Console.WriteLine("---- Somme de deux matrices booléenes ----");
+
+var matriceBoolD = matriceBoolA.Additionner(matriceBoolB);
+
+matriceBoolA.AfficherMatrice();
+Console.WriteLine("+");
+matriceBoolB.AfficherMatrice();
+Console.WriteLine("=");
+matriceBoolD.AfficherMatrice();
+
+Console.WriteLine("---- Comparaison de deux matrices");
+
+Console.WriteLine("---- Matrice transitive ----");
+
+var matriceTransitive = graphe.AvoirMatriceTransitive();
+matriceTransitive.AfficherMatrice();
