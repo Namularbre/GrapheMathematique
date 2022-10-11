@@ -44,73 +44,11 @@ static Graphe CreerGraphe()
 //Ici, on récupère le nouveau graphe généré par la saisi de l'utilisateur.
 Graphe graphe = CreerGraphe();
 
-graphe.Kruskal();
-
-graphe.VerdString();
-
-/*
-for (int iter = 1; iter <= graphe.aretes.Count; iter++)
-{
-    var res = matriceAdj.Puissance(iter);
-    Console.WriteLine("---- " + iter + " ----");
-    res.AfficherMatrice();
-}
-*/
-/*
+Console.WriteLine("---- Graphe saisi ----");
 Console.WriteLine(graphe.VerdString());
-graphe.TrierParAretesCout();
-Console.Write(graphe.VerdString());
+
 var matriceAdjacence = graphe.AvoirMatriceAdjacence();
 
+Console.WriteLine("---- Matrice d'adjacence ----");
 matriceAdjacence.AfficherMatrice();
 
-int[,] matriceA = new int[,] 
-{
-    {1, 2, 3},
-    {4, 5, 6},
-    {7, 8, 9}
-};
-
-int[,] matriceB = new int[,]
-{
-    {9, 8, 7},
-    {6, 5, 4},
-    {3, 2, 1}
-};
-
-var m1 = new Matrice(matriceA);
-var m2 = new Matrice(matriceB);
-
-var m12 = m1.Multiplier(m2);
-var m21 = m2.Multiplier(m1);
-var me2 = m1.Puissance(0);
-
-graphe.AfficherNombreChemin(matriceAdjacence, 4, 1, 4);
-
-int[,] contenuMatriceBool1 = new int[3, 3]
-{
-    {1, 0, 0},
-    {0, 1, 0},
-    {1, 0, 1}
-};
-
-int[,] contenuMatriceBool2 = new int[3, 3]
-{
-    {1, 0, 1},
-    {0, 1, 1},
-    {0, 0, 1}
-};
-
-var matriceBooleene1 = new MatriceBooleene(contenuMatriceBool1);
-var matriceBooleene2 = new MatriceBooleene(contenuMatriceBool2);
-
-var mb12 = matriceBooleene1.Multiplier(matriceBooleene2);
-
-mb12.AfficherMatrice();
-Console.WriteLine("-----------");
-var mb1plus2 = matriceBooleene1.Additionner(matriceBooleene2);
-
-mb1plus2.AfficherMatrice();
-
-Console.WriteLine("toto");
-graphe.AvoirArbreCouvrantMinimal();*/

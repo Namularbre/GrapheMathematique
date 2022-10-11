@@ -40,10 +40,10 @@ namespace ApplicationGraphe
                 this.sommets.Add(arete.sommetArrive);
             }
 
-            TrierSommets(this.sommets);
+            TrierSommets();
         }
 
-        private void TrierSommets(HashSet<int> sommets)
+        private void TrierSommets()
         {
             //Ici, on trie les sommets par ordre croissant celon le nom du sommet
             IEnumerable<int> sommetsEnOrdre = this.sommets.OrderBy(sommet => sommet);
