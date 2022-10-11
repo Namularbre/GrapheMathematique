@@ -42,7 +42,22 @@ static Graphe CreerGraphe()
     return new Graphe(nouvelleAretes);
 }
 //Ici, on récupère le nouveau graphe généré par la saisi de l'utilisateur.
-Graphe graphe = CreerGraphe();
+var graphe = CreerGraphe();
+
+/*Décommanter ce code et commenté la saisi du graphe si vous voulez tester plus rapidement*/
+/*Arete arete1 = new Arete(1, 2, 3);
+Arete arete2 = new Arete(2, 3, 4);
+Arete arete3 = new Arete(3, 1, 2);
+Arete arete4 = new Arete(3, 4, 1);
+
+HashSet<Arete> aretes = new HashSet<Arete>();
+
+aretes.Add(arete1);
+aretes.Add(arete2);
+aretes.Add(arete3);
+aretes.Add(arete4);
+
+graphe = new Graphe(aretes);*/
 
 Console.WriteLine("---- Graphe saisi ----");
 Console.WriteLine(graphe.VerdString());
@@ -142,3 +157,7 @@ Console.WriteLine("---- Matrice transitive ----");
 
 var matriceTransitive = graphe.AvoirMatriceTransitive();
 matriceTransitive.AfficherMatrice();
+
+Console.WriteLine("---- (Kruskal) ----");
+
+graphe.Kruskal();
