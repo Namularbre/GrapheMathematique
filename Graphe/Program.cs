@@ -42,9 +42,6 @@ static Graphe CreerGraphe()
     return new Graphe(nouvelleAretes);
 }
 //Ici, on récupère le nouveau graphe généré par la saisi de l'utilisateur.
-
-
-
 Graphe graphe = CreerGraphe();
 
 graphe.Kruskal();

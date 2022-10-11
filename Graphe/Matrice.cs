@@ -8,13 +8,15 @@ namespace ApplicationGraphe
 {
     internal class Matrice
     {
+        //Un tableau de deux dimensions qui représente le contenu d'une matrice
         public int[,] contenu { get; set; }
+        //Les matrices étant toutes carrées, on stoque seulement la longueur de la ligne.
         public int longueurLigneColonne { get; set; }
 
         public Matrice(int[,] contenu)
         {
             this.contenu = contenu;
-            //On récupère la taille des lignes de la matrice.
+            //On récupère le nombre de lignes de la matrice.
             this.longueurLigneColonne = contenu.GetLength(0);
         }
 
