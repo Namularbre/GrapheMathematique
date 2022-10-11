@@ -10,24 +10,32 @@ namespace ApplicationGraphe
 {
     internal class Graphe
     {
-        //Le HashSet contient une liste d'objet d'un seul et unique type. Il n'a JAMAIS de doublons.
+        //Le HashSet contient une liste d'objet d'un seul et unique type. Il n'a JAMAIS de doublons. Ici, il s'agit des arêtes du graphe
         public HashSet<Arete> aretes { get; set; }
+        //Le nombre d'arête. On pourrai aussi utilise aretes.Count.
         public int nombreArette { get; set; }
+        //La liste de sommets du graphe
         public HashSet<int> sommets { get; set; }
 
-        public Graphe(HashSet<Arete> aretes, int nombreArette)
+        //Le constructeur du graphe 
+        public Graphe(HashSet<Arete> aretes)
         {
             this.aretes = aretes;
-            this.nombreArette = nombreArette;
+            this.nombreArette = aretes.Count;
             DefinirSommetAPartirDesAretes();
         }
 
+        /*
+            Cette méthode sert à définir les sommets du graphe en se basant sur les arêtes
+        */
         private void DefinirSommetAPartirDesAretes()
         {
+            //On défini notre ensemble de sommets à un HASHSET vide. Le hashset est un ensemble n'ayant aucun doublons.
             this.sommets = new HashSet<int>();
-
+            //Pour chaque arêtes, on ajout les sommets au extrémité dans le hashset. 
             foreach (var arete in this.aretes)
             {
+                //Ici, si le sommet est déjà dans le hashset, il ne sera pas ajouter
                 this.sommets.Add(arete.sommetDepart);
                 this.sommets.Add(arete.sommetArrive);
             }
@@ -42,12 +50,18 @@ namespace ApplicationGraphe
             this.sommets = sommetsTrie;
         }
 
+        /*
+            Cette fonction parcours toutes les arêtes du graphe, et les places dans un string (chaine de caractère) afin
+            de pouvoir afficher le graphe par la suite.
+         */
         public string VerdString()
         {
             const char RETOUR_A_LA_LIGNE = '\n';
 
-            string affichage = "Nombre de sommet : " + this.nombreArette + RETOUR_A_LA_LIGNE;
+            //Affichage du nombre de sommet
+            string affichage = "Nombre de sommet : " + this.sommets.Count + RETOUR_A_LA_LIGNE;
 
+            //Affichage des arêtes
             foreach (Arete arete in this.aretes)
             {
                 affichage += arete.VersString() + RETOUR_A_LA_LIGNE;
@@ -56,7 +70,7 @@ namespace ApplicationGraphe
             return affichage;
         }
 
-        public HashSet<int> AvoirArete()
+        public HashSet<int> AvoirSommetsDuGraphe()
         {
             HashSet<int> sommetsGraphe = new HashSet<int>();
 
@@ -80,12 +94,23 @@ namespace ApplicationGraphe
             {
                 aretesTrierParPoid.Add(arete);
             }
-            //On donne au graphe  
+            //Les arêtes du graphe sont rangée par poid grace à cette ligne.
             this.aretes = aretesTrierParPoid;
         }
 
+        /**
+         * Cette méthode sert à avoir l'index d'un sommet contenu dans le Hashset. Cela sert par exemple si notre graphe est composé des
+         * sommets suivant : 100, 8, 6, -1. Imaginons que je souhaite afficher la matrice d'adjacence. Il me faudra accèder au quotient de la
+         * matrice avec des coordonnées. Or, ici, si j'essaye, je serais en dehors du tableau dès le début, car mon graphe contient 4 sommets,
+         * et que j'essaye de d'accèder à la case [100, 8] de mon tableau. Pour pouvoir nommer les sommets comme on le souhaite, on passe
+         * par cette méthode qui pour un sommet donné renvois ça place dans le tableau.
+         * Dans notre exemple, elle transforme [100, 8] par [0, 1].
+         * 
+        */
         private int AvoirIndexSommet(int sommetCherche)
         {
+            //On parcourt chaque sommet de notre hashset, si un sommet est égale à celui recherché, on revois sont index, égale à l'iterateur. 
+            const int SOMMET_INTROUVABLE = -1;
             int iterateur = 0;
             foreach (int sommet in this.sommets)
             {
@@ -95,7 +120,8 @@ namespace ApplicationGraphe
                 }
                 iterateur++;
             }
-            return -1;
+            //Si le sommet et introuvable, on retourne -1. /!\ cela fait planté le programme...
+            return SOMMET_INTROUVABLE;
         }
 
         public Matrice AvoirMatriceAdjacence()

@@ -49,6 +49,7 @@ Graphe graphe = CreerGraphe();
 
 graphe.Kruskal();
 
+graphe.VerdString();
 
 /*
 for (int iter = 1; iter <= graphe.aretes.Count; iter++)
