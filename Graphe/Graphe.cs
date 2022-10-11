@@ -40,13 +40,22 @@ namespace ApplicationGraphe
                 this.sommets.Add(arete.sommetArrive);
             }
 
+            TrierSommets(this.sommets);
+        }
+
+        private void TrierSommets(HashSet<int> sommets)
+        {
+            //Ici, on trie les sommets par ordre croissant celon le nom du sommet
             IEnumerable<int> sommetsEnOrdre = this.sommets.OrderBy(sommet => sommet);
+            //On créer un nouveau hashset qui contiendra les sommets triés.
             HashSet<int> sommetsTrie = new HashSet<int>();
 
+            //Pour chaque sommets triés, on les ajoutes dans le nouveau hashset
             foreach (var sommet in sommetsEnOrdre)
             {
                 sommetsTrie.Add(sommet);
             }
+            //Le graphe à maintenant ses sommets rangés
             this.sommets = sommetsTrie;
         }
 
@@ -70,18 +79,18 @@ namespace ApplicationGraphe
             return affichage;
         }
 
-        public HashSet<int> AvoirSommetsDuGraphe()
-        {
-            HashSet<int> sommetsGraphe = new HashSet<int>();
+        //public HashSet<int> AvoirSommetsDuGraphe()
+        //{
+        //    HashSet<int> sommetsGraphe = new HashSet<int>();
 
-            foreach(Arete arete in this.aretes)
-            {
-                sommetsGraphe.Add(arete.sommetDepart);
-                sommetsGraphe.Add(arete.sommetArrive);
-            }
+        //    foreach (Arete arete in this.aretes)
+        //    {
+        //        sommetsGraphe.Add(arete.sommetDepart);
+        //        sommetsGraphe.Add(arete.sommetArrive);
+        //    }
 
-            return sommetsGraphe;
-        }
+        //    return sommetsGraphe;
+        //}
 
         public void TrierParAretesCout()
         {
@@ -124,6 +133,9 @@ namespace ApplicationGraphe
             return SOMMET_INTROUVABLE;
         }
 
+        /*
+            Cette méthode retourne un objet matrice contenant la matrice d'adjacence du graphe.
+         */
         public Matrice AvoirMatriceAdjacence()
         {
             //On créer un tableau de 2 dimensions de taille nombreArette*nombreArette
@@ -148,8 +160,10 @@ namespace ApplicationGraphe
             return new Matrice(matriceAdjacence);
         }
 
-        public void AfficherNombreChemin(Matrice matriceAdjacence, int longueurChemin, int sommetDepart, int sommetFin)
+        public void AfficherNombreChemin(int longueurChemin, int sommetDepart, int sommetFin)
         {
+            //On récupère la matrice d'adjacence du graphe.
+            var matriceAdjacence = this.AvoirMatriceAdjacence();
             //On utilise la matrice d'adjacence du graphe, que l'on monte à la puissance = à la longueur du chemin.
             //Cela nous donne le nombre de chemin de longueur donnée dans cette matrice, à la place :
             //M(index du sommet de départ dans la liste des sommets, index du sommet d'arrivé dans la liste des sommets)
@@ -161,6 +175,12 @@ namespace ApplicationGraphe
                 longueurChemin + " est : " + nombreChemins);
         }
 
+        /**
+         *  Cette classe sera uniquement utilisée dans l'algo de Kruskal
+         *  Le parent permet de savoir si un cycle sera formé si on marque l'arete (ce qu'on ne veut pas)
+         *  Les sommets qui auront le même parent sont de la même famille
+         *  Le rang permet d'établir une hiérarchie entre les familles
+         */
         public class Famille
         {
             public int parent, rang;
@@ -172,21 +192,31 @@ namespace ApplicationGraphe
             }
         };
 
+        /**
+         *  Cette méthode permet de récupérer son parent
+         */
         private int AvoirParent(List<Famille> familles, int sommet)
         {
+            //Si le sommet n'est pas sont parent, alors on vas chercher la parent le plus ancien dans ça famille.
             if (familles[AvoirIndexSommet(sommet)].parent != sommet)
             {
                 familles[AvoirIndexSommet(sommet)].parent = AvoirParent(familles, familles[AvoirIndexSommet(sommet)].parent);
             }
-
+            //On retourne le parent du sommet
             return familles[AvoirIndexSommet(sommet)].parent;
         }
-
+        /*
+            Cette méthode prend deux sommets, et les attributs à la même famille.
+         */
         private void Union(List<Famille> familles, int sommetDepart, int sommetArrive)
         {
+            //On vas chercher les parents des deux sommets.
             int plusVieuxParentSommetDepart = AvoirParent(familles, sommetDepart);
             int plusVieuxParentSommetArrive = AvoirParent(familles, sommetArrive);
-
+            /**
+             * On les attributs au rang le plus élevé.
+             * Si ils ont le même rang, augmente le rang du sommet de départ de 1
+            */
             if (familles[AvoirIndexSommet(plusVieuxParentSommetDepart)].rang < familles[AvoirIndexSommet(plusVieuxParentSommetArrive)].rang)
             {
                 familles[AvoirIndexSommet(plusVieuxParentSommetDepart)].parent = plusVieuxParentSommetArrive;
@@ -204,25 +234,33 @@ namespace ApplicationGraphe
 
         public void Kruskal()
         {
+            //On trie les arêtes par coût.
             TrierParAretesCout();
 
+            //On créé une liste qui contiendra notre arbre couvrant de poid minimal
             List<Arete> resultat = new List<Arete>();
 
+            //Les familles sont des composantes connexes qui nous servent à déterminé si une arête peut créer un cycle parmis celle déjà marquées.
             List<Famille> familles = new List<Famille>();
 
+            //Pour chaque sommet, on les ajoutes dans notre liste de famille
             foreach (var sommet in this.sommets)
             {
+                //Le parent de chaque sommet et lui même par défaut, sont rang est 0.
                 familles.Add(new Famille(sommet, 0));
             }
 
+            //Pour chaque arête, on récupère les parents des sommets qu'elles relies.
             foreach (Arete arete in this.aretes)
             {
                 int plusVieuxParentSommetDepart = AvoirParent(familles, arete.sommetDepart);
                 int plusVieuxParentSommetArrive = AvoirParent(familles, arete.sommetArrive);
-
+                //Si leurs parents ne sont pas les mêmes, on ajoute l'arête à notre arbre, car cela signifie qu'il ne font pas
+                //de cycle dans les arêtes sélectionnées.
                 if (plusVieuxParentSommetDepart != plusVieuxParentSommetArrive)
                 {
                     resultat.Add(arete);
+                    //Ici, les deux sommets rejoignent la même famille.
                     Union(familles, plusVieuxParentSommetDepart, plusVieuxParentSommetArrive);
                 }
             }
@@ -230,7 +268,7 @@ namespace ApplicationGraphe
             Console.WriteLine("---- Arbre couvrant minimal ----");
 
             int coutMinimal = 0;
-
+            //On calcul le cout minimal de l'arbre et on affiche les arêtes du l'arbre couvrant de poid minimal.
             foreach (var areteResult in resultat)
             {
                 Console.WriteLine(areteResult.VersString());
@@ -240,26 +278,31 @@ namespace ApplicationGraphe
             Console.WriteLine("Poid de l'arbre : " + coutMinimal);
         }
 
-        private HashSet<Arete> TrouverAreteSommet(int sommet)
-        {
-            var aretesReliees = new HashSet<Arete>();
+        //private HashSet<Arete> TrouverAreteSommet(int sommet)
+        //{
+        //    var aretesReliees = new HashSet<Arete>();
 
-            foreach (var arete in this.aretes)
-            {
-                if (arete.sommetDepart == sommet || arete.sommetArrive == sommet)
-                {
-                    aretesReliees.Add(arete);
-                    TrouverAreteSommet(arete.sommetDepart);
-                    TrouverAreteSommet(arete.sommetArrive);
-                }
-            }
-            return aretesReliees;
-        }
+        //    foreach (var arete in this.aretes)
+        //    {
+        //        if (arete.sommetDepart == sommet || arete.sommetArrive == sommet)
+        //        {
+        //            aretesReliees.Add(arete);
+        //            TrouverAreteSommet(arete.sommetDepart);
+        //            TrouverAreteSommet(arete.sommetArrive);
+        //        }
+        //    }
+        //    return aretesReliees;
+        //}
 
+        /**
+         * Cette méthode renvoie une matrice transitive
+         * La matrice renvoyée permet de savoir si il existe un chemin entre 2 sommets
+         */
         public Matrice AvoirMatriceTransitive()
         {
             int[,] matriceAdjacence = this.AvoirMatriceAdjacence().contenu;
 
+            // Ici, on utilise l'algo de Floyd Warshall
             for (int k = 0; k < matriceAdjacence.GetLength(0); k++)
             {
                 for (int iterateurLigne = 0; iterateurLigne < matriceAdjacence.GetLength(0); iterateurLigne++)
@@ -275,10 +318,6 @@ namespace ApplicationGraphe
                         {
                             matriceAdjacence[iterateurLigne, iterateurColonne] = 0;
                         }
-                        /*
-                        matriceAdjacence[iterateurLigne, iterateurColonne] = (matriceAdjacence[iterateurLigne, iterateurColonne] != 0) ||
-                            ((matriceAdjacence[iterateurLigne, k] != 0) && (matriceAdjacence[k, iterateurColonne] != 0)) ? 1 : 0;
-                        */
                     }
                 }
             }

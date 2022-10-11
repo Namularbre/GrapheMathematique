@@ -8,9 +8,12 @@ namespace ApplicationGraphe
 {
     internal class Arete
     {
+        // Liste des attribues que possède chaque arête: origine, destination, coût de l'arête
+        // Les "get/set" permette de "récupérer/modifier" ces attribue
         public int sommetDepart { get; set; }
         public int sommetArrive { get; set; }
         public int poidArete { get; set; }
+
 
         public Arete(int sommetDepart, int sommetArrive, int poidArette)
         {

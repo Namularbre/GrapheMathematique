@@ -39,7 +39,7 @@ static Graphe CreerGraphe()
         }
     }
     //On retourne un nouveau graphe, en lui donnant les arêtes saisi et leur nombre (avec Count)
-    return new Graphe(nouvelleAretes, nouvelleAretes.Count);
+    return new Graphe(nouvelleAretes);
 }
 //Ici, on récupère le nouveau graphe généré par la saisi de l'utilisateur.
 
